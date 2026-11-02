@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>MNIST from Scratch / Technical Notes</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Syne:wght@500;600;700;800&display=swap');
+      :root { color: #162126; background: #e9e4d8; font-family: 'DM Mono', monospace; }
+      * { box-sizing: border-box; } body { margin: 0; min-width: 320px; }
+      main { max-width: 1120px; margin: auto; padding: 28px clamp(20px, 5vw, 78px) 70px; }
+      nav { display: flex; justify-content: space-between; align-items: baseline; border-bottom: 1px solid #162126; padding-bottom: 18px; font-size: 10px; letter-spacing: .1em; }
+      nav strong { font: 800 18px Syne; letter-spacing: -.08em; } nav a { color: #162126; }
+      .eyebrow { margin-top: 80px; color: #4c787c; font-size: 10px; letter-spacing: .12em; }
+      h1 { max-width: 850px; margin: 18px 0 28px; font: 700 clamp(46px, 8vw, 92px)/.93 Syne; letter-spacing: -.07em; }
+      h1 em { color: #ee754d; font-style: normal; } .intro { max-width: 620px; color: #607074; line-height: 1.7; font-size: 13px; }
+      .notes { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; margin-top: 70px; }
+      article { border: 1px solid #162126; background: rgba(250,248,241,.64); padding: 24px; box-shadow: 5px 5px 0 #162126; }
+      article.wide { grid-column: 1 / -1; } h2 { margin: 0 0 16px; font: 700 20px Syne; letter-spacing: -.04em; } p, li { color: #607074; font-size: 12px; line-height: 1.75; } ul { margin: 0; padding-left: 18px; }
+      .flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 22px; } .step { padding: 14px 10px; border-top: 2px solid #36d7e6; } .step strong { display: block; font: 700 18px Syne; } .step span { color: #708083; font-size: 10px; }
+      code { color: #162126; background: #dce9e6; padding: 2px 5px; } .back { display: inline-block; margin-top: 48px; color: #162126; font-size: 10px; letter-spacing: .1em; }
+      @media (max-width: 680px) { .notes, .flow { grid-template-columns: 1fr; } article.wide { grid-column: auto; } }
+    </style>
+  </head>
+  <body>
+    <main>
+      <nav><strong>MNIST / FROM SCRATCH</strong><a href="./">BACK TO DRAWING ↗</a></nav>
+      <div class="eyebrow">TECHNICAL NOTES / 01</div>
+      <h1>What happens between<br /><em>the pixel and the answer.</em></h1>
+      <p class="intro">This project trains a small neural network with NumPy, exports its parameters as JSON, and reproduces the forward pass in the browser with plain JavaScript.</p>
+      <section class="notes">
+        <article class="wide"><h2>Forward pass</h2><p>The browser receives the normalized 28 × 28 drawing, flattens it to 784 values, and applies the same operations as the Python model:</p><div class="flow"><div class="step"><strong>784</strong><span>input pixels</span></div><div class="step"><strong>ReLU</strong><span>128 hidden values</span></div><div class="step"><strong>softmax</strong><span>10 probabilities</span></div><div class="step"><strong>argmax</strong><span>predicted digit</span></div></div></article>
+        <article><h2>Training</h2><ul><li>MNIST handwritten digit dataset</li><li>Mini-batch gradient descent</li><li>He initialization</li><li>ReLU hidden layer</li><li>Softmax cross-entropy output</li></ul></article>
+        <article><h2>Input alignment</h2><p>Canvas ink is converted to a 28 × 28 intensity array. The frontend finds the ink bounding box, scales it into the MNIST writing area, then shifts the result using its center of mass before inference.</p></article>
+        <article><h2>Deployment</h2><p>The site is static. <code>weights.json</code> is fetched by the browser, and inference runs in <code>inference.js</code>. No Flask, Node server, TensorFlow.js, or ONNX runtime is involved.</p></article>
+        <article><h2>Weight export</h2><p><code>model/main.py</code> serializes <code>W₁, b₁, W₂, b₂</code> into JSON and mirrors the file into <code>web/public/</code> for the Vite build.</p></article>
+      </section>
+      <a class="back" href="./">← RETURN TO LIVE INFERENCE</a>
+    </main>
+  </body>
+</html>
